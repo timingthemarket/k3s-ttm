@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: article-news-raw
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: article-news-raw
+  template:
+    metadata:
+      labels:
+        app: article-news-raw
+    spec:
+      containers:
+        - name: article-news-raw
+          image: 192.168.68.63:5000/article-news-raw:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          envFrom:
+            - secretRef:
+                name: article-news-raw
+          ports:
+            - containerPort: 5007
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: article-news-raw
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    app: article-news-raw
+  ports:
+    - port: 5007
+      targetPort: 5007
