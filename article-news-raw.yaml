@@ -41,3 +41,30 @@ spec:
   ports:
     - port: 5007
       targetPort: 5007
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: article-news-raw-stripprefix
+  namespace: default
+spec:
+  stripPrefix:
+    prefixes:
+      - /articles
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: article-news-raw
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/articles`)
+      kind: Rule
+      services:
+        - name: article-news-raw
+          port: 5007
+      middlewares:
+        - name: article-news-raw-stripprefix
