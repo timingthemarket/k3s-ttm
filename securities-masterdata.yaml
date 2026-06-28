@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: securities-masterdata
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: securities-masterdata
+  template:
+    metadata:
+      labels:
+        app: securities-masterdata
+    spec:
+      containers:
+        - name: securities-masterdata
+          image: 192.168.68.63:5000/securities_masterdata:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          envFrom:
+            - secretRef:
+                name: securities-masterdata
+          ports:
+            - containerPort: 5001
+            - containerPort: 5101
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: securities-masterdata
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    app: securities-masterdata
+  ports:
+    - name: api
+      port: 5001
+      targetPort: 5001
+    - name: secondary
+      port: 5101
+      targetPort: 5101
