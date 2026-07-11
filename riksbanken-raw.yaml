@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: riksbanken-raw
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: riksbanken-raw
+  template:
+    metadata:
+      labels:
+        app: riksbanken-raw
+    spec:
+      containers:
+        - name: riksbanken-raw
+          image: 192.168.68.63:5000/riksbanken-raw:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          envFrom:
+            - secretRef:
+                name: riksbanken-raw
+          ports:
+            - containerPort: 5005
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: riksbanken-raw
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    app: riksbanken-raw
+  ports:
+    - port: 5005
+      targetPort: 5005
