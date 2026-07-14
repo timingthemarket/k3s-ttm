@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: boersdata-raw
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: boersdata-raw
+  template:
+    metadata:
+      labels:
+        app: boersdata-raw
+    spec:
+      containers:
+        - name: boersdata-raw
+          image: 192.168.68.63:5000/boersdata-raw:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          envFrom:
+            - secretRef:
+                name: boersdata-raw
+          ports:
+            - containerPort: 5004
+            - containerPort: 5104
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: boersdata-raw
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    app: boersdata-raw
+  ports:
+    - name: api
+      port: 5004
+      targetPort: 5004
+    - name: secondary
+      port: 5104
+      targetPort: 5104
