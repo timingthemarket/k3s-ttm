@@ -36,13 +36,15 @@ metadata:
   name: securities-masterdata
   namespace: default
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: securities-masterdata
   ports:
     - name: api
       port: 5001
       targetPort: 5001
+      nodePort: 30003
     - name: secondary
       port: 5101
       targetPort: 5101
+      nodePort: 30004
