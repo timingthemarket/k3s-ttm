@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: securities-masterdata
-          image: 192.168.68.63:5000/securities_masterdata:latest
+          image: 192.168.68.63:5000/securities-masterdata:latest
           resources:
             requests:
               memory: "256Mi"
