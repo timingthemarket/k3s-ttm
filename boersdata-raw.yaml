@@ -36,13 +36,15 @@ metadata:
   name: boersdata-raw
   namespace: default
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: boersdata-raw
   ports:
     - name: api
       port: 5004
       targetPort: 5004
+      nodePort: 30005
     - name: secondary
       port: 5104
       targetPort: 5104
+      nodePort: 30006
