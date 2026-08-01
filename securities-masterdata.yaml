@@ -18,8 +18,8 @@ spec:
           image: 192.168.68.63:5000/securities-masterdata:latest
           resources:
             requests:
-              memory: "512Mi"
-              cpu: "200m"
+              memory: "1024Mi"
+              cpu: "400m"
             limits:
               memory: "2048Mi"
               cpu: "1000m"
