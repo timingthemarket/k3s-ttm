@@ -39,8 +39,10 @@ spec:
   selector:
     app: article-news-raw
   ports:
-    - port: 5007
+    - name: api
+      port: 5007
       targetPort: 5007
       nodePort: 30007
-    - port: 5107
+    - name: grpc
+      port: 5107
       targetPort: 5107
